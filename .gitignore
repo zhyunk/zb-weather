@@ -183,4 +183,7 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+######## SECRET KEY INFO
+application-SECRET-KEY.properties
+
 # End of https://www.toptal.com/developers/gitignore/api/git,intellij+all,windows,gradle,java
