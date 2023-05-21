@@ -57,8 +57,13 @@ public class DiaryService {
     public void updateDiary(LocalDate date, String text) {
         Diary nowDiary = diaryRepository.getFirstByDate(date);
         nowDiary.setText(text);
-        diaryRepository.save(nowDiary); // nowDiary에 id값이 있으면 값이 덮어씌어짐 
+        diaryRepository.save(nowDiary); // nowDiary에 id값이 있으면 값이 덮어씌어짐
     }
+
+    public void deleteDiary(LocalDate date) {
+        diaryRepository.deleteAllByDate(date);
+    }
+
     private String getWeatherString() {
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=seoul&appId=" + apiKey;
 
