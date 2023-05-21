@@ -1,15 +1,17 @@
 package zerobase.weather.service;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import zerobase.weather.domain.Diary;
+import zerobase.weather.repository.DiaryRepository;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -20,6 +22,12 @@ public class DiaryService {
     @Value("${open-weather}")
     private String apiKey;
 
+    private final DiaryRepository diaryRepository;
+
+    public DiaryService(DiaryRepository diaryRepository) {
+        this.diaryRepository = diaryRepository;
+    }
+
     public void createDiary(LocalDate date, String text) {
         // open weather 가져오기
         String weatherData = getWeatherString();
@@ -28,7 +36,13 @@ public class DiaryService {
         Map<String, Object> parsedWeather = parseWeather(weatherData);
 
         // 파싱 된 데이터 + 일기 값 db에 넣기
-
+        Diary nowDiary = new Diary();
+        nowDiary.setWeather(parsedWeather.get("main").toString());
+        nowDiary.setIcon(parsedWeather.get("icon").toString());
+        nowDiary.setTemperature((Double) parsedWeather.get("temp"));
+        nowDiary.setText(text);
+        nowDiary.setDate(date);
+        diaryRepository.save(nowDiary);
     }
 
     private String getWeatherString() {
@@ -76,7 +90,7 @@ public class DiaryService {
         JSONObject mainData = (JSONObject) jsonObject.get("main");
         resultMap.put("temp", mainData.get("temp"));
 
-        JSONObject weatherData = (JSONObject) jsonObject.get("weather");
+        JSONObject weatherData = ((JSONObject) ((JSONArray) jsonObject.get("weather")).get(0));
         resultMap.put("main", weatherData.get("main"));
         resultMap.put("icon", weatherData.get("icon"));
 
