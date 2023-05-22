@@ -12,7 +12,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional // db에 수정사항을 만들지 않을것임을 알림
+@Transactional // 이게 테스트 클래스에 붙으면 자동으로 rollback 시킴
 class JpaMemoRepositoryTest {
 
     @Autowired
