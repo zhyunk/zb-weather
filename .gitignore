@@ -186,4 +186,6 @@ gradle-app.setting
 ######## SECRET KEY INFO
 application-SECRET-KEY.properties
 
+########## logs
+logs
 # End of https://www.toptal.com/developers/gitignore/api/git,intellij+all,windows,gradle,java
